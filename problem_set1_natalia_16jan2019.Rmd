@@ -1,0 +1,213 @@
+---
+title: "problem_set1"
+author: "Natalia Aristizábal"
+date: "1/16/2019"
+output: html_document
+---
+
+First problem set for Quantitative Reasoning
+Spring 2019
+Dr. Easton White III
+
+### Exercise 1 
+
+Modify the following code to determine the long-term behavior of the discrete-time logistic growth model. In the example below, the population moves towards an equilbrium point. 
+
+```{r}
+# Parameters starting with r at 0.4 
+max_time = 100
+r = 0.4
+K = 1
+
+N = vector('numeric',length=max_time)
+N[1] = 0.1
+
+
+# Iterate model
+for (t in 1:max_time){
+  N[t+1] = N[t] + r*N[t]*(1 - N[t]/K)
+}
+
+plot(N)
+```
+
+Increasing r gradually... 
+
+```{r}
+# Parameters with r at 1
+max_time = 100
+r = 1
+K = 1
+
+N = vector('numeric',length=max_time)
+N[1] = 0.1
+
+
+# Iterate model
+for (t in 1:max_time){
+  N[t+1] = N[t] + r*N[t]*(1 - N[t]/K)
+}
+
+plot(N)
+
+
+# Parameters with r at 1.5 
+max_time = 100
+r = 1.5
+K = 1
+
+N = vector('numeric',length=max_time)
+N[1] = 0.1
+
+
+# Iterate model
+for (t in 1:max_time){
+  N[t+1] = N[t] + r*N[t]*(1 - N[t]/K)
+}
+
+plot(N)
+
+# Parameters with r at 2 
+max_time = 100
+r = 2
+K = 1
+
+N = vector('numeric',length=max_time)
+N[1] = 0.1
+
+
+# Iterate model
+for (t in 1:max_time){
+  N[t+1] = N[t] + r*N[t]*(1 - N[t]/K)
+}
+
+plot(N)
+
+# Parameters with r at 2.5 
+max_time = 100
+r = 2.5
+K = 1
+
+N = vector('numeric',length=max_time)
+N[1] = 0.1
+
+
+# Iterate model
+for (t in 1:max_time){
+  N[t+1] = N[t] + r*N[t]*(1 - N[t]/K)
+}
+
+plot(N)
+
+```
+
+How does the long-term behavior change as you increase r slowly?
+
+As r increases, the curve becomes steeper which means that the population will reach its carrying capacity faster. Meaning, in the long-term, the population will not be in a stable equilibrium when r > 2. The population becomes cyclical and eventually it will be in chaos. 
+
+### Exercise 2 
+
+To show the results in question 1 more clearly, write R code to build a plot of the equilibrium value versus the value for r. To do this, run the model for 50 years, and only plot the last 10 years. If the solution is an equilibrium point, all 10 years should be the same values.
+
+```{r}
+# call packets needed
+library(ggplot2)
+library(reshape2)
+
+# Easton's pointers in class: use a loop within a loop. Such as: 
+
+#for(r in seq()) {
+#  for (t in 1:max_time) {
+#   print(N)
+#  }
+#  points()
+#}
+
+# One approach is to first build an empty matrix
+m <- matrix(data=NA, nrow=411, ncol=11)
+ 
+# explaination for matrix:
+# I want 22 rows because I am creating a sequence of 4 values from 0.4 to 4.5, which sum up to 411 numbers. 
+# I want 11 columns because I am interested in the last 10 N values plus a column for r 
+# I want the cells to be orginally filled with NAs and filled them up after the loop. 
+
+# set parameters
+max_time = 50
+K = 1
+N = vector('numeric', length = max_time)
+N[1] = 0.1
+
+# temporary matrix to carry the last ten years that we are interested in
+temp = NULL
+index = 0
+
+for(r in seq(from = 0.4, to = 4.5, by = 0.01)) {  # creating a sequence of r values from 0.4 to 2.5
+    for(t in 1:max_time) {                 # creating a loop for years 1:50
+      N[t + 1] = N[t] + r * N[t] * (1 - N[t] / K) 
+      temp[t] = N[t + 1]
+      temp = (N[41:50])
+    }
+  index = index + 1
+  m[index, 1] = r
+  m[index, 2:11] = temp
+}
+
+
+print(m[41:50])
+
+## we need to get rid of the 1:1 line by removing siteA
+tail(m)
+m <- m[ ,2:11]
+tail(m)
+
+
+# change the matrix from short to long format
+rownames(m) <-(as.character(seq(from = 0.4, to = 4.5, by = 0.01)))
+colnames(m) <-paste("Site", LETTERS[1:10], sep = "")
+m_long <- melt(m, id = colnames(m))
+head(m_long)
+```
+
+
+```{r}
+# plotting the last ten years of r values ~ population size
+ggplot(m_long, aes(x=Var1, y=value)) +
+  geom_point() +
+  xlab("r") + 
+  ylab("population size") +
+  theme_classic()
+```
+
+```{r}
+# second trial 
+############################################
+m <- matrix(data=1:12,
+            nrow=22,
+            byrow=TRUE)
+# trial with code from a double loop in Nick's class
+# double for loop for operating on r and 
+m <- matrix(c(0.4,2.5), nrow=50)
+for(i in 1:nrow(m)) {
+  for(j in 1:ncol(m)) {
+    m[i,j] <- m[i,j] + i + j  
+    #m[r,t] <- m[r,t] + r + t   
+  } 
+} 
+
+head(m)
+```
+
+3. Fisheries example (bonus)
+
+```{r, }
+cod_pop <- c(1450, 1420, 1050, 2643, 1060, 1080, 1410, 1150, 740, 175, 43, 10, 12, 15, 16, 16, 28, 30, 32, 23, 12, 19, 27)
+years <- c(1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 
+1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 
+2004, 2005)
+
+par(mfrow=c(1,2))
+plot(years,cod_pop,ylim=c(0,3000),las=1,ylab='Population (tonnes)',xlab='Time (years)',pch=16)
+plot(cod_pop[1:(length(cod_pop)-1)],cod_pop[2:length(cod_pop)],ylab='N[t+1]',xlab='N[t]',las=1,pch=16)
+
+mtext(text = 'Atlantic cod population - Canada',side = 3,line = -3,outer=T)
+```
