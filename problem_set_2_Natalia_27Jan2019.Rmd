@@ -4,28 +4,233 @@ author: "Natalia Aristizábal"
 date: "1/27/2019"
 output: html_document
 ---
-Problem set 2: Single-species models in continuous time
+### Problem set 2: Single-species models in continuous time
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+1. Exponential growth in cancer
+
+Imagine you are applying your ecology and evolution knowledge to better understand the development of cancer (a burgeoning new field actually11 Merlo et al., 2006. Cancer as an evolutionary and ecological process. Nature reviews cancer, 6(12), p.924.). After metastasizing, cancer spread throughout the body, a single cancer cell reached the patient’s colon. The cancer cell now divides and grows at an exponential rate. Spratt et. al (1996) found that colon cancer had an average doubling time of 109 days. Assume a lethal cancer size is on the order of 1 x 10 ^12 (1 000 000 000 000) cells. 
+
+How long will it take for the colon tumor to reach this lethal size if left untreated?
+
+Helpful reading: Merlo et al., 2006. Cancer as an evolutionary and ecological process. Nature reviews cancer, 6(12), p.924.
+
+$$N_t = N_0{e^{rt}}$$
+
+Using the exponential growth rate rule above, solve for R 
+
+$$\frac{N_t}{N_0} = e^{rt}$$
+
+$$\frac{ln(\frac{N_t}{N_0})}{t} = r$$
+
+$$\frac{ln(\frac{2}{1})}{109} = r$$
+
+$$ 0.006 = r$$
+
+Now use r to find t 
+
+$$\frac{ln(\frac{N_t}{N_0})}{r} = t$$
+
+$$\frac{ln(\frac{1 x 10^{12}}{1})}{0.006} = t$$
+
+$$4,989 = t$$
+
+So it will take 4,989 days, about 13.5 years, for the colon tumor to reach a lethal size, asuming it was left untreated. 
+
+
+2. Sterile insect release
+
+One strategy to combat problematic insect species (like malaria-carrying mosquitoes) is to release sterile males to overwhelm the population. This approach is being used to control Aedes aegypti and Aedes albopictus mosquitoes in the hopes of preventing dengue and yellow fever. The equation below denotes the number of females (F), number of males (M), birth rate (b), and death rate (d). Determine the equilibrium points and the stability of each for the equation. 
+
+From   $$\frac{dN}{dt} = b\frac{N}{N+M}-d$$
+
+
+Find the two equilibrium points: 
+
+$$N = 0$$
+
+and
+
+$$0 = b\frac{N}{N+M}-d$$
+
+$$0 = b\frac{N}{N+M}-d(N + M)$$
+
+$$0 = \frac{bN - dN - dM}{N+M})$$
+
+$$0 = \frac{N(b - d) - dM}{N+M})$$
+
+$$N(b - d) = dM$$
+
+$$N = \frac{dM}{b-d}$$
+
+To find stability we take the derivative of the second equilibrium:
+
+$$\frac{dF}{dN} = \frac{bN}{N+M}-d$$
+
+```{r }
+library(Ryacas) # to find the derivative
+
+df <- expression(((b*N)/(N+M))-d)
+
+derivative <- D(df, "N")
+print(derivative)
+```
+$$\frac{b}{(N + M)} - \frac{bN}{(N + M)^{2}}$$
+
+```{r}
+equilibrium = expression(dM / (b-d))
+
+# stable <- function(x) {
+#   equilibrium
+# 
+# df
 ```
 
-## R Markdown
+Which equilibrium point tells you the critical threshold for population extinction? How does this relate to the Allee effect?
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+3. Sterile insect release with competition
+
+The previous problem did not include any negative density-dependence. To test this assumption, we can include competition in our previous problem. Assuming N=0 is an equilbium point (if N=0, it will not change), modify the code below to estimate the two other equilbrium points and each of their stability. If the population drops below 0, assume it went extinct. You can modify both the initial state value for N or the amount of time (times object) to run the model. When you know the equilbrium points and their stability, sketch a plot of $b\frac{N}{N+M}-d-cN$ versus N and show the equilibrium points as open (unstable) or closed (stable) balls.
+
+$$\frac{dN}{dt} = b\frac{N}{N+M}-d-cN$$
+
+Manipulating the initial population state and running different models. 
+```{r }
+require(deSolve)
+
+# Initial values: population at 10
+state <- c(N = 10)
+times <- seq(0, 100, by = 0.1)
+
+# Parameters
+parameters <- c(b = 2.4, c = 0.02, M = 50, d = 0.2)
+
+# Model
+sterile_insect <- function(t, state, parameters) {
+  with(as.list(c(state, parameters)), {
+       dN <- b * N / (N + M) - d - c * N
+      list(c(dN))   
+  })}
+
+# Solve model and plot results
+out <- ode(y = state, times = times, func = sterile_insect, parms = parameters)
+par(mfrow = c(1, 1))
+plot(out[ ,1], out[ ,2], 
+                xlab = 'N', 
+                ylab = 'time',
+                las = 1)
+
+# Initial values: population at 20
+state <- c(N = 20)
+times <- seq(0, 100, by = 0.1)
+
+# Parameters
+parameters <- c(b = 2.4, c = 0.02, M = 50, d = 0.2)
+
+# Model
+sterile_insect <- function(t, state, parameters) {
+  with(as.list(c(state, parameters)), {
+       dN <- b * N / (N + M) - d - c * N
+      list(c(dN))   
+  })}
+
+# Solve model and plot results
+out <- ode(y = state, times = times, func = sterile_insect, parms = parameters)
+par(mfrow = c(1, 1))
+plot(out[ ,1], out[ ,2], 
+                xlab = 'N', 
+                ylab = 'time',
+                las = 1)
+
+# Initial values: population at 40
+state <- c(N = 40)
+times <- seq(0, 100, by = 0.1)
+
+# Parameters
+parameters <- c(b = 2.4, c = 0.02, M = 50, d = 0.2)
+
+# Model
+sterile_insect <- function(t, state, parameters) {
+  with(as.list(c(state, parameters)), {
+       dN <- b * N / (N + M) - d - c * N
+      list(c(dN))   
+  })}
+
+# Solve model and plot results
+out <- ode(y = state, times = times, func = sterile_insect, parms = parameters)
+par(mfrow = c(1, 1))
+plot(out[ ,1], out[ ,2], 
+                xlab = 'N', 
+                ylab = 'time',
+                las = 1)
+
+# Initial values: population at 50
+state <- c(N = 50)
+times <- seq(0, 100, by = 0.1)
+
+# Parameters
+parameters <- c(b = 2.4, c = 0.02, M = 50, d = 0.2)
+
+# Model
+sterile_insect <- function(t, state, parameters) {
+  with(as.list(c(state, parameters)), {
+       dN <- b * N / (N + M) - d - c * N
+      list(c(dN))   
+  })}
+
+# Solve model and plot results
+out <- ode(y = state, times = times, func = sterile_insect, parms = parameters)
+par(mfrow = c(1, 1))
+plot(out[ ,1], out[ ,2], 
+                xlab = 'N', 
+                ylab = 'time',
+                las = 1)
+
+# Initial values: population at 100
+state <- c(N = 100)
+times <- seq(0, 100, by = 0.1)
+
+# Parameters
+parameters <- c(b = 2.4, c = 0.02, M = 50, d = 0.2)
+
+# Model
+sterile_insect <- function(t, state, parameters) {
+  with(as.list(c(state, parameters)), {
+       dN <- b * N / (N + M) - d - c * N
+      list(c(dN))   
+  })}
+
+# Solve model and plot results
+out <- ode(y = state, times = times, func = sterile_insect, parms = parameters)
+par(mfrow = c(1, 1))
+plot(out[ ,1], out[ ,2], 
+                xlab = 'N', 
+                ylab = 'time',
+                las = 1)
 ```
 
-## Including Plots
+Ok. So Equilibrium points = N = 10, N= 50. 
 
-You can also embed plots, for example:
+I will try to learn for next time how to do this with a loop so that I don't have to manually change a parameter. 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+
+Now plot the equation 
+```{r}
+# parameters
+b = 2.4
+c = 0.02
+M = 50
+d = 0.2
+
+curve(b * x / (x + M) - d - c * x, from = 0, to = 100, xlab="x", ylab="y")
+
+
+x <- c(0,10,50)
+y <- c(0,0,0)
+
+points(x,y, pch = c(1, 1, 16))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Equilibrium points shown as open (unstable) and closed (stable) balls.
+
