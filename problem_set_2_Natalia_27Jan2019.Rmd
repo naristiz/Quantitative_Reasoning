@@ -30,11 +30,11 @@ Now use r to find t
 
 $$\frac{ln(\frac{N_t}{N_0})}{r} = t$$
 
-$$\frac{ln(\frac{1 x 10^{12}}{1})}{0.006} = t$$
+$$\frac{ln(\frac{1 x 10^{12}}{1})}{ 0.006359148} = t$$
 
-$$4,989 = t$$
+$$4345.082 = t$$
 
-So it will take 4,989 days, about 13.5 years, for the colon tumor to reach a lethal size, asuming it was left untreated. 
+So it will take 4,345 days, or about 12 years, for the colon tumor to reach a lethal size, asuming it was left untreated. 
 
 
 2. Sterile insect release
@@ -44,11 +44,11 @@ One strategy to combat problematic insect species (like malaria-carrying mosquit
 From   $$\frac{dN}{dt} = b\frac{N}{N+M}-d$$
 
 
-Find the two equilibrium points: 
+Find the two equilibrium points, the first one is:
 
 $$N = 0$$
 
-and
+and the second one is:
 
 $$0 = b\frac{N}{N+M}-d$$
 
@@ -62,32 +62,21 @@ $$N(b - d) = dM$$
 
 $$N = \frac{dM}{b-d}$$
 
-To find stability we take the derivative of the second equilibrium:
+To find stability, or rate of change, we take the derivative and then susbtitute with N from above:
 
-$$\frac{dF}{dN} = \frac{bN}{N+M}-d$$
+$$\frac{dN}{dt} = b\frac{N}{N+M}-d$$
 
-```{r }
-library(Ryacas) # to find the derivative
+$$\frac{bM}{\ (N + M)^2}$$
 
-df <- expression(((b*N)/(N+M))-d)
+$$\frac{bM}{\ (\frac{dM}{b-d} + M)^2}$$
 
-derivative <- D(df, "N")
-print(derivative)
-```
-$$\frac{b}{(N + M)} - \frac{bN}{(N + M)^{2}}$$
+$$\frac{bM}{\ (\frac{bM}{b-d})^2}$$
 
-```{r}
-equilibrium = expression(dM / (b-d))
-
-# stable <- function(x) {
-#   equilibrium
-# 
-# df
-```
+$$\frac{(b-d)^2}{bM}$$
 
 Which equilibrium point tells you the critical threshold for population extinction? How does this relate to the Allee effect?
 
-
+There are two unstable equilibrium points, but only one makes biological sense, when N = 0, and that one indicates the critical threshold for population extinction. This threshold, is also called an Allele effect, or the point at which the population size will not recuparate and inevitably go extinct. 
 
 3. Sterile insect release with competition
 

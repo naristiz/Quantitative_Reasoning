@@ -144,40 +144,31 @@ $(document).ready(function () {
 <p><span class="math display">\[ 0.006 = r\]</span></p>
 <p>Now use r to find t</p>
 <p><span class="math display">\[\frac{ln(\frac{N_t}{N_0})}{r} = t\]</span></p>
-<p><span class="math display">\[\frac{ln(\frac{1 x 10^{12}}{1})}{0.006} = t\]</span></p>
-<p><span class="math display">\[4,989 = t\]</span></p>
-<p>So it will take 4,989 days, about 13.5 years, for the colon tumor to reach a lethal size, asuming it was left untreated.</p>
+<p><span class="math display">\[\frac{ln(\frac{1 x 10^{12}}{1})}{ 0.006359148} = t\]</span></p>
+<p><span class="math display">\[4345.082 = t\]</span></p>
+<p>So it will take 4,345 days, or about 12 years, for the colon tumor to reach a lethal size, asuming it was left untreated.</p>
 <ol start="2" style="list-style-type: decimal">
 <li>Sterile insect release</li>
 </ol>
 <p>One strategy to combat problematic insect species (like malaria-carrying mosquitoes) is to release sterile males to overwhelm the population. This approach is being used to control Aedes aegypti and Aedes albopictus mosquitoes in the hopes of preventing dengue and yellow fever. The equation below denotes the number of females (F), number of males (M), birth rate (b), and death rate (d). Determine the equilibrium points and the stability of each for the equation.</p>
 <p>From <span class="math display">\[\frac{dN}{dt} = b\frac{N}{N+M}-d\]</span></p>
-<p>Find the two equilibrium points:</p>
+<p>Find the two equilibrium points, the first one is:</p>
 <p><span class="math display">\[N = 0\]</span></p>
-<p>and</p>
+<p>and the second one is:</p>
 <p><span class="math display">\[0 = b\frac{N}{N+M}-d\]</span></p>
 <p><span class="math display">\[0 = b\frac{N}{N+M}-d(N + M)\]</span></p>
 <p><span class="math display">\[0 = \frac{bN - dN - dM}{N+M})\]</span></p>
 <p><span class="math display">\[0 = \frac{N(b - d) - dM}{N+M})\]</span></p>
 <p><span class="math display">\[N(b - d) = dM\]</span></p>
 <p><span class="math display">\[N = \frac{dM}{b-d}\]</span></p>
-<p>To find stability we take the derivative of the second equilibrium:</p>
-<p><span class="math display">\[\frac{dF}{dN} = \frac{bN}{N+M}-d\]</span></p>
-<pre class="r"><code>library(Ryacas) # to find the derivative
-
-df &lt;- expression(((b*N)/(N+M))-d)
-
-derivative &lt;- D(df, &quot;N&quot;)
-print(derivative)</code></pre>
-<pre><code>## b/(N + M) - (b * N)/(N + M)^2</code></pre>
-<p><span class="math display">\[\frac{b}{(N + M)} - \frac{bN}{(N + M)^{2}}\]</span></p>
-<pre class="r"><code>equilibrium = expression(dM / (b-d))
-
-# stable &lt;- function(x) {
-#   equilibrium
-# 
-# df</code></pre>
+<p>To find stability, or rate of change, we take the derivative and then susbtitute with N from above:</p>
+<p><span class="math display">\[\frac{dN}{dt} = b\frac{N}{N+M}-d\]</span></p>
+<p><span class="math display">\[\frac{bM}{\ (N + M)^2}\]</span></p>
+<p><span class="math display">\[\frac{bM}{\ (\frac{dM}{b-d} + M)^2}\]</span></p>
+<p><span class="math display">\[\frac{bM}{\ (\frac{bM}{b-d})^2}\]</span></p>
+<p><span class="math display">\[\frac{(b-d)^2}{bM}\]</span></p>
 <p>Which equilibrium point tells you the critical threshold for population extinction? How does this relate to the Allee effect?</p>
+<p>There are two unstable equilibrium points, but only one makes biological sense, when N = 0, and that one indicates the critical threshold for population extinction. This threshold, is also called an Allele effect, or the point at which the population size will not recuparate and inevitably go extinct.</p>
 <ol start="3" style="list-style-type: decimal">
 <li>Sterile insect release with competition</li>
 </ol>
