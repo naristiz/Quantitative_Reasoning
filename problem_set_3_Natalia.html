@@ -131,12 +131,12 @@ $(document).ready(function () {
 <p>Problem set 3: Structured population models Foundations of Quantitative Reasoning with Dr. Easton R. White</p>
 <pre class="r"><code># load packages 
 library(tidyverse) </code></pre>
-<pre><code>## ── Attaching packages ───────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
 ## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
 ## ✔ readr   1.2.1     ✔ forcats 0.3.0</code></pre>
-<pre><code>## ── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ───────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>library(popbio) # construction and analysis of matrix population models
@@ -218,11 +218,11 @@ comadre$mat[821][[1]] # there are four matrices: matA, matU, matF, and matC</cod
 <ol style="list-style-type: lower-alpha">
 <li>What species (and location if available) did you choose? Why did you choose the species?</li>
 </ol>
-<p>I chose to work with the Cabbage aphid from the U.S. because understanding its population dynamics would be ecologically and economically important. Additionally, I have previous experience raising aphids in laboratory conditions and have seen their populations rapidly increase or die over a short period of time under stable environmental conditions and this would be a great chance to explore the mechanisms behind those population changes. Especially because you can tease apart mating resources in populatin dynamics since aphdis clone themselves. Additionally, I though that Cabbage aphids are a good system to study predator-prey populations dynamics that I will be teaching soon in class and that are the base ecological models behind my research interests.</p>
+<p>I chose to work with the Cabbage aphid from the U.S. because understanding its population dynamics would be ecologically and economically important because they are a significant agricultural pest. Additionally, I have previous experience raising aphids in laboratory conditions and have seen their populations rapidly increase or die over a short period of time under stable environmental conditions and this would be a great chance to explore the mechanisms behind those population changes. Especially because you can tease apart mating resources in population dynamics since female aphdis clone themselves. Cabbage aphids are a good system to study predator-prey populations dynamics that I will be teaching soon in class and that are the base ecological models behind my research interests.</p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>What question do you want to answer about this population (e.g. population status, best management strategies)?</li>
 </ol>
-<p>I am interested in understanding strategies to manage aphid population’s rapid growth, thinking more in terms of biological control by predators than by inorganic pesticides. At which age stage is the cabbage aphid population growth more sensitive? Thinking about when an individual vulnerable to a predators (or to an organic insecticide) would be more effictive to control the population.</p>
+<p>I am interested in understanding strategies to manage aphid population’s rapid growth, thinking more in terms of biological control by predators than by inorganic pesticides. At which age stage is the cabbage aphid population growth more sensitive? I would like to know which age group is more vulnerable (to a predators or to an organic insecticide) and hence more effictively control the population.</p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Calculate eigenvalue, stable age distribution, elasticity, and sensitivity.</li>
 </ol>
@@ -303,10 +303,9 @@ eigen_elasticity &lt;- elasticity(aphids)
 which.max(eigen_elasticity)</code></pre>
 <pre><code>## [1] 29</code></pre>
 <p>Ok. Now, what does this tell you about the population?</p>
-<p>Sensitivity tells us how a change in a parameter will affect population growth. In this population of aphids, it seems like the most sensitive parameter is the transition from 1st instars to 2nd instars.And according to Cibils-Stewart et al definition: “Elasticities measure the effect of a proportional change in a matrix element on k and enable direct comparisons of demographic rates between survival (bounded between 0 and 1) and fecundity (bounded between 0 and infinity) among the treatments.” So, based on the elasticity we know that the 5th instars, or reproductive adults, have a greater impact to population growth, as expected.</p>
-<p>Do we get the same proportional change if we tweak the sensitivity?</p>
-<pre class="r"><code># modified form Brendan Case
-m &lt;- aphids
+<p>Sensitivity tells us how a change in a parameter will affect population growth. In this population of aphids, it seems like the most sensitive parameter is the transition from 1st instars to 2nd instars. And according to Cibils-Stewart et al definition: “Elasticities measure the effect of a proportional change in a matrix element on k and enable direct comparisons of demographic rates between survival (bounded between 0 and 1) and fecundity (bounded between 0 and infinity) among the treatments.” So, based on the elasticity value obstained, we know that the 5th instars, or reproductive adults, have a greater proportional impact in the population growth, as expected.</p>
+<p>Do we get the same results if we tweak with the sensitivity value?</p>
+<pre class="r"><code>m &lt;- aphids
 
 my_func = function(i, j, L) {
    old = eigen(L)[[1]][1]
@@ -353,10 +352,10 @@ cross2(1:nrow(m), 1:ncol(m)) %&gt;%
 ## changed: 4, 6 difference in eigenval: 0.000998833346233408+0i
 ## changed: 5, 6 difference in eigenval: 0.00205256591089609+0i
 ## changed: 6, 6 difference in eigenval: 0+0i</code></pre>
-<p>YES! The results stay the same. A change in a 1st instars will potentially affect more this population of cabbage aphids.</p>
-<p>Do we get the same proportional change if we tweak the elasticity?</p>
-<pre class="r"><code># modified from Brendan Case
-m &lt;- aphids
+<pre class="r"><code># credit to Brendan Case</code></pre>
+<p>YES! The results stay the same. A change in the transition from 1st to 2nd instar will affect more this population of cabbage aphids.</p>
+<p>Do we get the same proportional change if we tweak the elasticity value?</p>
+<pre class="r"><code>m &lt;- aphids
 
 my_func = function(i, j, L) {
    old = eigen(L)[[1]][1]
@@ -403,11 +402,12 @@ cross2(1:nrow(m), 1:ncol(m)) %&gt;%
 ## changed: 4, 6 difference in eigenval: 0+0i
 ## changed: 5, 6 difference in eigenval: 0+0i
 ## changed: 6, 6 difference in eigenval: 0+0i</code></pre>
-<p>… and YES! We obtain the same result as above. The proportional change at the reproductive stage (5th instar) will affect more the population growth model of cabbage aphids.</p>
+<pre class="r"><code># credit to Brendan Case</code></pre>
+<p>… also YES! We obtain the same result as above. The proportional change at the reproductive stage (5th instar) will affect more the population growth model of cabbage aphids.</p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Using the calculations in part (c), or additional calculations, address the question you proposed in part (b).</li>
 </ol>
-<p>To manage this population of cabbage aphids, we know that we can have a big impact in the population by targeting the survival of 1st instars. However, from the elasticity analysis we find support to decrease proportionally the population growth by targeting 5th instars (reproductive adults).</p>
+<p>To manage this population of cabbage aphids, we know that the population is most sensitive to a change in the survival of 1st instars. However, from the elasticity analysis we find more support to target 5th instars (reproductive adults) in order to proportionally decrease the population growth.</p>
 <p>References</p>
 <p>Stubben, C.J. and Milligan, B.G. 2007. Estimating and Analyzing Demographic Models Using the popbio Package in R. Journal of Statistical Software 22:11.</p>
 
