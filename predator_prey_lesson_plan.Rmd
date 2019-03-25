@@ -1,0 +1,41 @@
+---
+title: "Predator-prey lesson plan"
+author: "Natalia Aristizábal"
+date: "3/23/2019"
+output: html_document
+---
+BIO 381: Foundations of Quantitative Reasoning Spring 2019
+
+Assignment: Backward Design Lesson Plan
+
+Name: Natalia Aristizábal
+
+Title: Predator-Prey Interactions
+
+Step 1: expected outcomes
+
+By the end of the lesson, students should be able to:
+
+- explain the Lotka-Volterra model, 
+- understand its parameters, limitations, and assumptions
+- use it to find predator-prey dynamics 
+- apply the model for biological control 
+
+####$$\frac{dV}{dt} = rV - {\alpha VP}$$ 
+
+####$$\frac{dP}{dt} = {\beta VP} - qP$$ 
+
+Step 2: class problem set and chalk talk
+First by themselves and then together as a class we will work on a problem set using the Lotka-Volterra equation to find population dynamics predicted by the model.
+Then through volunteer participation, together as a class using the chalk board we will transfer the Lotka-Volterra equation into a graph. 
+
+Step 3: understand applications of the model
+Through field data examples and discussion, students will be able to think creatively on how to use the model to ask questions about popoulation control of insect pests, insect-borne or transmitted diseases, invasive species. 
+
+Step 4: reflect on the following questions:
+
+What went well in the lesson and why?
+
+What could be improved and why?
+
+What would you do differently next time (in the preparation, delivery, etc)?
